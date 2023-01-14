@@ -5,7 +5,7 @@ describe('parser', () => {
     expect(parser('zero')).toBe(0)
   })
 
-  test.skip('it can parse single digits', () => {
+  test('it can parse single digits', () => {
     expect(parser('one')).toBe(1)
     expect(parser('two')).toBe(2)
     expect(parser('three')).toBe(3)
@@ -17,7 +17,7 @@ describe('parser', () => {
     expect(parser('nine')).toBe(9)
   })
 
-  test.skip('it can parse tweens and teens', () => {
+  test('it can parse tweens and teens', () => {
     expect(parser('ten')).toBe(10)
     expect(parser('eleven')).toBe(11)
     expect(parser('twelve')).toBe(12)
@@ -30,7 +30,7 @@ describe('parser', () => {
     expect(parser('nineteen')).toBe(19)
   })
 
-  test.skip('in can parse round tens', () => {
+  test('in can parse round tens', () => {
     expect(parser('twenty')).toBe(20)
     expect(parser('thirty')).toBe(30)
     expect(parser('forty')).toBe(40)
@@ -41,19 +41,19 @@ describe('parser', () => {
     expect(parser('ninety')).toBe(90)
   })
 
-  test.skip('it can parse base ten magnitudes', () => {
+  test('it can parse base ten magnitudes', () => {
     expect(parser('one hundred')).toBe(100)
     expect(parser('one thousand')).toBe(1000)
     expect(parser('one million')).toBe(1000000)
   })
 
-  test.skip('it can parse two digit nums between 20 and 100', () => {
+  test('it can parse two digit nums between 20 and 100', () => {
     expect(parser('forty-six')).toBe(46)
     expect(parser('fifty-five')).toBe(55)
     expect(parser('twenty-one')).toBe(21)
   })
 
-  test.skip('it can parse numbers above 100', () => {
+  test('it can parse numbers above 100', () => {
     expect(parser('one hundred one')).toBe(101)
     expect(parser('one hundred forty-six')).toBe(146)
     expect(parser('two hundred twenty-three')).toBe(223)
@@ -61,14 +61,14 @@ describe('parser', () => {
     expect(parser('eight hundred eighteen')).toBe(818)
   })
 
-  test.skip('it can parse numbers above 1000', () => {
+  test('it can parse numbers above 1000', () => {
     expect(parser('one hundred thousand one')).toBe(100001)
     expect(parser('nine hundred thirty-eight thousand')).toBe(938000)
     expect(parser('one hundred twenty thousand two hundred forty-five')).toBe(120245)
     expect(parser('nine hundred forty-eight thousand six hundred fourteen')).toBe(948614)
   })
 
-  test.skip("it can parse numbers that make use of 'and'", () => {
+  test("it can parse numbers that make use of 'and'", () => {
     expect(parser('one hundred and one')).toBe(101)
     expect(parser('nine hundred and thirty-eight thousand')).toBe(938000)
     expect(parser('nine hundred and forty-eight thousand six hundred and fourteen')).toBe(948614)
