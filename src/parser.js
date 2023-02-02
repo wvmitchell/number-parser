@@ -40,10 +40,16 @@ function dashSplit(num) {
     return numDict[tens] + numDict[ones]
 }
 
-function hundredSplit(spaceSplit) {
-    const firstMultiplier = spaceSplit[0]
-    const magnitudeMultiplier = spaceSplit[1]
-    const addition = spaceSplit[2] || ''
+function simpleSpaceSplit(numArray) {
+    const firstMultiplier = numArray[0]
+    const magnitudeMultiplier = numArray[1]
+    return numDict[firstMultiplier] * numDict[magnitudeMultiplier] 
+}
+
+function hundredSplit(numArray) {
+    const firstMultiplier = numArray[0]
+    const magnitudeMultiplier = numArray[1]
+    const addition = numArray[2] || ''
     let numToAdd;
     if (addition.includes('-') ) {
         numToAdd = dashSplit(addition)
@@ -51,6 +57,12 @@ function hundredSplit(spaceSplit) {
         numToAdd = numDict[addition] || 0
     }
     return (numDict[firstMultiplier] * numDict[magnitudeMultiplier]) + numToAdd 
+}
+
+function thousandSplit(numArray) {
+    const beforeThousand = numArray.slice(0, numArray.indexOf('thousand'))
+    const afterThousand = numArray.slice(numArray.indexOf('thousand') + 1, numArray.length)
+    return (hundredSplit(beforeThousand) * numDict['thousand']) + (afterThousand.length ? hundredSplit(afterThousand) || numDict[afterThousand] : 0) 
 }
 
 function andRemover(array) {
@@ -63,15 +75,11 @@ module.exports = function parser(num) {
     if (num.includes(' ')) {
         const spaceSplit = andRemover(num.split(' '))
         if (spaceSplit.length > 2 && spaceSplit.includes('hundred') && spaceSplit.includes('thousand')) { 
-            const beforeThousand = spaceSplit.slice(0, spaceSplit.indexOf('thousand'))
-            const afterThousand = spaceSplit.slice(spaceSplit.indexOf('thousand') + 1, spaceSplit.length)
-            return (hundredSplit(beforeThousand) * numDict['thousand']) + (afterThousand.length ? hundredSplit(afterThousand) || numDict[afterThousand] : 0)
+            return thousandSplit(spaceSplit)
         } else if (spaceSplit.length > 2 && spaceSplit.includes('hundred')) {
             return hundredSplit(spaceSplit)
         }
-        const firstMultiplier = spaceSplit[0]
-        const magnitudeMultiplier = spaceSplit[1]
-        return numDict[firstMultiplier] * numDict[magnitudeMultiplier]
+        return simpleSpaceSplit(spaceSplit)
     }
 
     if (num.includes('-')) {
