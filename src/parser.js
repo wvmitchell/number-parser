@@ -33,36 +33,36 @@ const numDict = {
     'million': 1000000
 }
 
-function dashSplit(num) {
+function convertSimpleDash(num) {
     const dashSplit = num.split('-')
     const tens = dashSplit[0]
     const ones = dashSplit[1]
     return numDict[tens] + numDict[ones]
 }
 
-function simpleSpaceSplit(numArray) {
+function convertSimpleSpace(numArray) {
     const firstMultiplier = numArray[0]
     const magnitudeMultiplier = numArray[1]
     return numDict[firstMultiplier] * numDict[magnitudeMultiplier] 
 }
 
-function hundredSplit(numArray) {
+function convertHundreds(numArray) {
     const firstMultiplier = numArray[0]
     const magnitudeMultiplier = numArray[1]
     const addition = numArray[2] || ''
     let numToAdd;
     if (addition.includes('-') ) {
-        numToAdd = dashSplit(addition)
+        numToAdd = convertSimpleDash(addition)
     } else {
         numToAdd = numDict[addition] || 0
     }
     return (numDict[firstMultiplier] * numDict[magnitudeMultiplier]) + numToAdd 
 }
 
-function thousandSplit(numArray) {
+function convertThousands(numArray) {
     const beforeThousand = numArray.slice(0, numArray.indexOf('thousand'))
     const afterThousand = numArray.slice(numArray.indexOf('thousand') + 1, numArray.length)
-    return (hundredSplit(beforeThousand) * numDict['thousand']) + (afterThousand.length ? hundredSplit(afterThousand) || numDict[afterThousand] : 0) 
+    return (convertHundreds(beforeThousand) * numDict['thousand']) + (afterThousand.length ? convertHundreds(afterThousand) || numDict[afterThousand] : 0) 
 }
 
 function andRemover(array) {
@@ -75,15 +75,15 @@ module.exports = function parser(num) {
     if (num.includes(' ')) {
         const spaceSplit = andRemover(num.split(' '))
         if (spaceSplit.length > 2 && spaceSplit.includes('hundred') && spaceSplit.includes('thousand')) { 
-            return thousandSplit(spaceSplit)
+            return convertThousands(spaceSplit)
         } else if (spaceSplit.length > 2 && spaceSplit.includes('hundred')) {
-            return hundredSplit(spaceSplit)
+            return convertHundreds(spaceSplit)
         }
-        return simpleSpaceSplit(spaceSplit)
+        return convertSimpleSpace(spaceSplit)
     }
 
     if (num.includes('-')) {
-        return dashSplit(num)
+        return convertSimpleDash(num)
     }
 
     return numDict[num]
